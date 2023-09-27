@@ -1,56 +1,146 @@
-const keyNum1 = document.getElementById('num1').addEventListener('click', () => displayValue('1'));
-const keyNum2 = document.getElementById('num2').addEventListener('click', () => displayValue('2'));
-const keyNum3 = document.getElementById('num3').addEventListener('click', () => displayValue('3'));
-const keyNum4 = document.getElementById('num4').addEventListener('click', () => displayValue('4'));
-const keyNum5 = document.getElementById('num5').addEventListener('click', () => displayValue('5'));
-const keyNum6 = document.getElementById('num6').addEventListener('click', () => displayValue('6'));
-const keyNum7 = document.getElementById('num7').addEventListener('click', () => displayValue('7'));
-const keyNum8 = document.getElementById('num8').addEventListener('click', () => displayValue('8'));
-const keyNum9 = document.getElementById('num9').addEventListener('click', () => displayValue('9'));
-const keyNum0 = document.getElementById('num0').addEventListener('click', () => displayValue('0'));
-const operatorAdd = document.getElementById('op+').addEventListener('click', () => displayValue('+'));
-const operatorSub = document.getElementById('op-').addEventListener('click', () => displayValue('-'));
-const operatorMul = document.getElementById('op*').addEventListener('click', () => displayValue('*'));
-const operatorDiv = document.getElementById('op/').addEventListener('click', () => displayValue('/'));
-const operatorEqu = document.getElementById('op=').addEventListener('click', () => displayValue('='));
-const clearButton = document.getElementById('opC').addEventListener('click', () => displayValue('clear'));
-const inputScreen = document.getElementById('input');
+const numButtons = document.querySelectorAll(".num-button");
+const operatorButtons = document.querySelectorAll(".op-button");
+const display = document.querySelector(".display");
+const clearButton = document.querySelector(".clear-button");
+const equalsButton = document.querySelector(".equals-button");
+const deleteButton = document.querySelector(".delete-button");
+const minusButton = document.getElementById("minus-button");
 
-function add(num1, num2) {
-    return num1 + num2;
+let numberA = "";
+let numberB = "";
+let chainedNumber = "";
+let clickedNumber = "";
+let operator = "";
+display.innerText = 0;
+let resultValue = "";
+
+document.getElementById("minus-button").disabled = true;
+
+
+function add(a, b) {
+    return a + b;
 }
 
-function subtract(num1, num2) {
-    return num1 - num2;
+function subtract(a, b) {
+    return a - b;
 }
 
-function multiply(num1, num2) {
-    return num1 * num2;
+function multiply(a, b) {
+    return a * b;
 }
 
-function divide(num1, num2) {
-    return num1 / num2;
+function divide(a, b) {
+    return a / b;
 }
 
-function operate(operator, num1, num2) {
-    if (operator === '+') return add(num1, num2);
-    if (operator === '-') return subtract(num1, num2);
-    if (operator === '*') return multiply(num1, num2);
-    if (operator === '/') return divide(num1, num2);
+function operate(op, numA, numB) {
+    if (op === "/" && numB === 0) return "ERROR";
+    if (op === "+") return add(numA, numB);
+    if (op === "-") return subtract(numA, numB);
+    if (op === "*") return multiply(numA, numB);
+    if (op === "/") return divide(numA, numB);
 }
 
-function displayValue(displayVal) {
-    inputVal += displayVal;
-    inputScreen.textContent = inputVal;
-    console.log(inputVal);
+numButtons.forEach((button) => {
+    button.addEventListener("click", numberDisplay);
+});
+
+operatorButtons.forEach((button) => {
+    button.addEventListener("click", operatorCalculation);
+});
+
+equalsButton.addEventListener("click", equalsCalculation);
+clearButton.addEventListener("click", clearDisplay);
+deleteButton.addEventListener("click", deleteNumber);
+minusButton.addEventListener("click", () => {
+    if (operator == "" && numberB === "") {
+        numberA = -numberA;
+        display.innerText = -display.innerText;
+    } else if (operator !== "") {
+        numberB = -numberB;
+        display.innerText = -display.innerText;
+    }
+});
+
+
+function numberDisplay(event) {
+    if (display.innerText.length > 9) {
+        document.getElementsByClassName("num-button").disabled = true;
+    }
+    if (event.target.value === ".") {
+        document.getElementById("decimal-button").disabled = true;
+    }
+    clickedNumber = event.target.value
+    if (operator === "" && numberB === "") {
+        numberA += clickedNumber;
+        display.innerText = numberA;
+        document.getElementById("minus-button").disabled = false;
+    } else if (operator !== "") {
+        numberB += clickedNumber;
+        display.innerText = numberB;
+        document.getElementById("minus-button").disabled = false;
+    }
 }
 
-let numA = 0;
-let numB = 0;
-let operator = '';
-let inputVal = '';
+function operatorCalculation(event) {
+    document.getElementById("decimal-button").disabled = false;
+    document.getElementById("minus-button").disabled = false;
+    chainedNumber = operate(operator, parseFloat(numberA), parseFloat(numberB));
+    if (operator === "") {
+        operator = event.target.value;
+        clickedNumber = "";
+        document.getElementById("minus-button").disabled = true;
+    } else {
+        if (chainedNumber !== "ERROR") {
+            operator = event.target.value;
+            numberA = +chainedNumber.toFixed(2);
+            display.innerText = numberA;
+            numberB = "";
+            document.getElementById("minus-button").disabled = true;
+        } else {
+            display.innerText = chainedNumber;
+        }
+    }
+}
 
+function equalsCalculation() {
+    document.getElementById("decimal-button").disabled = false;
+    document.getElementById("minus-button").disabled = false;
+    if (numberA !== "" && numberB === "") {
+        display.innerText = numberA;
+        resultValue = numberA;
+        operator = "";     
+    } else {
+        resultValue = operate(operator, parseFloat(numberA), parseFloat(numberB));
+        if (resultValue !== "ERROR") {
+            display.innerText = +resultValue.toFixed(2);
+            numberA = +resultValue.toFixed(2);
+            numberB = "";
+            operator = "";
+            document.getElementById("minus-button").disabled = true;
+        } else {
+            display.innerText = resultValue;
+        }
+    }
+}
 
-console.log("sub", operate('-', 4, 6));
-console.log("mul", operate('*', 4, 6));
-console.log("div", operate('/', 4, 6));
+function clearDisplay() {
+    display.innerText = 0;
+    numberA = "";
+    numberB = "";
+    operator = "";
+    document.getElementById("decimal-button").disabled = false;
+    document.getElementById("minus-button").disabled = true;
+}
+
+function deleteNumber() {
+    if (operator === "" && numberB === "") {
+        let newNumber = numberA.slice(0, -1);
+        numberA = newNumber;
+        display.innerText = numberA;
+    } else if (operator !== "") {
+        let newNumber = numberB.slice(0, -1);
+        numberB = newNumber;
+        display.innerText = numberB;
+    }
+}

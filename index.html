@@ -7,25 +7,40 @@
     <script src="scripts.js" defer></script>
 </head>
 <body>
-    <div class="container">
-        <div id="screen">5 + 6</div>
-        <div class="buttons">
-            <button id="num1">1</button>
-            <button id="num2">2</button>
-            <button id="num3">3</button>
-            <button id="num4">4</button>
-            <button id="num5">5</button>
-            <button id="num6">6</button>
-            <button id="num7">7</button>
-            <button id="num8">8</button>
-            <button id="num9">9</button>
-            <button id="num0">0</button>
-            <button id="op+">+</button>
-            <button id="op-">-</button>
-            <button id="op*">*</button>
-            <button id="op/">/</button>
-            <button id="op=">=</button>
-            <button id="opC">clear</button>
+    <div class="outer-container">
+        <div class="container">
+            <p class="display"></p>
+            <div class="buttons-container">
+                <div class="top-buttons">
+                    <button class="clear-button">Clear</button>
+                    <button class="delete-button">Delete</button>
+                    <button id="minus-button" value="-">minus</button>
+                </div>
+                <div class="buttons-row">
+                    <button class="num-button" value="7" id="button7">7</button>
+                    <button class="num-button" value="8" id="button8">8</button>
+                    <button class="num-button" value="9" id="button9">9</button>
+                    <button class="op-button" value="/">/</button>
+                </div>
+                <div class="buttons-row">
+                    <button class="num-button" value="4" id="button4">4</button>
+                    <button class="num-button" value="5" id="button5">5</button>
+                    <button class="num-button" value="6" id="button6">6</button>
+                    <button class="op-button" value="*">x</button>
+                </div>
+                <div class="buttons-row">
+                    <button class="num-button" value="1" id="button1">1</button>
+                    <button class="num-button" value="2" id="button2">2</button>
+                    <button class="num-button" value="3" id="button3">3</button>
+                    <button class="op-button" value="-">-</button>
+                </div>
+                <div class="buttons-row">
+                    <button class="num-button" value="0" id="button0">0</button>
+                    <button class="num-button" id="decimal-button" value=".">.</button>
+                    <button class="equals-button">=</button>
+                    <button class="op-button" value="+">+</button>
+                </div>
+            </div>
         </div>
     </div>
 </body>
